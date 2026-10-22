@@ -3,8 +3,9 @@
 // ============================================================
 
 // Nomor WhatsApp tujuan semua CTA.
-// Format internasional tanpa +, tanpa 0 di depan (0813-5949-396).
-export const WA_NUMBER = '628135949396';
+// Format internasional tanpa +, tanpa 0 di depan.
+// Contoh: 0812-3456-7890 → '6281234567890'
+export const WA_NUMBER = 'YOUR_WHATSAPP_NUMBER';
 
 // Helper: bikin link WhatsApp dengan pesan pembuka yang sudah disesuaikan
 // per tombol, jadi tim sales langsung tahu konteks & niat pengunjung.
@@ -17,20 +18,22 @@ export const WA_LINK = waLink(WA_MESSAGE);
 
 // Meta Pixel. Dipakai Layout.astro (loader + PageView) dan src/tracking.ts
 // (conversion event). Satu tempat, jadi ganti akun ads cukup di sini.
-export const META_PIXEL_ID = '2947105598961528';
+// Dapatkan dari: https://business.facebook.com → Events Manager → Pixels
+export const META_PIXEL_ID = 'YOUR_META_PIXEL_ID';
 
 // Google Tag Manager. Container ini yang mengatur tag Google (GA4, Ads).
-// Meta Pixel tetap hardcoded terpisah, lihat catatan di src/tracking.ts.
-export const GTM_ID = 'GTM-P6VVTJ4Z';
+// Dapatkan dari: https://tagmanager.google.com → buat container baru
+export const GTM_ID = 'GTM-XXXXXXX';
 
 // Microsoft Clarity, heatmap + session recording. Gratis, tanpa sampling.
 // Berguna untuk landing page iklan: kelihatan sampai mana orang scroll dan
 // di bagian mana mereka berhenti sebelum menekan CTA.
-export const CLARITY_ID = 'yce2uk3t3z';
+// Dapatkan dari: https://clarity.microsoft.com → buat project baru
+export const CLARITY_ID = 'YOUR_CLARITY_ID';
 
-// Statistik resmi, hanya dari website resmi inchathub.com, jangan ditambah-tambahi.
+// Statistik bisnis klien. Sesuaikan dengan data resmi bisnis Anda.
 export const STATS = {
-  businesses: '500+',
-  messages: '10jt+',
-  uptime: '98%',
+  businesses: '500+',   // jumlah bisnis aktif
+  messages: '10jt+',   // pesan per bulan
+  uptime: '98%',        // uptime platform
 } as const;

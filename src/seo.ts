@@ -24,11 +24,11 @@
 
 import { WA_NUMBER } from './config';
 
-/** Domain utama, sumber kebenaran entitas brand & target canonical. */
-export const MAIN_SITE_URL = 'https://inchathub.com';
+/** Domain utama bisnis klien, sumber kebenaran entitas brand & target canonical. */
+export const MAIN_SITE_URL = 'https://yourdomain.com';
 
-/** Domain deploy landing page iklan ini. */
-export const SITE_URL = 'https://ads.inchathub.com';
+/** Domain deploy landing page iklan ini. Biasanya subdomain ads. */
+export const SITE_URL = 'https://ads.yourdomain.com';
 
 /**
  * Set true hanya jika subdomain ini memang ingin bersaing di pencarian
@@ -37,11 +37,11 @@ export const SITE_URL = 'https://ads.inchathub.com';
 export const INDEXABLE = false;
 
 export const SITE = {
-  name: 'ChatHub',
-  /** Nama panjang untuk og:site_name & schema alternateName. */
-  legalName: 'PT Chat Hub Indonesia',
+  name: 'YourBrandName',
+  /** Nama legal perusahaan untuk og:site_name & schema alternateName. */
+  legalName: 'PT Nama Perusahaan',
   /** Dipakai sebagai suffix title di halaman selain homepage. */
-  tagline: 'Omnichannel + AI Chatbot + Smart CRM',
+  tagline: 'Tagline Produk Anda',
   locale: 'id_ID',
   lang: 'id',
   /** Warna theme untuk address bar mobile & PWA manifest. */
@@ -119,7 +119,7 @@ export const organizationSchema = {
   '@id': ORG_ID,
   name: SITE.name,
   legalName: SITE.legalName,
-  alternateName: ['inChatHub', 'Chat Hub'],
+  alternateName: [SITE.name],
   url: MAIN_SITE_URL,
   logo: {
     '@type': 'ImageObject',
@@ -130,7 +130,7 @@ export const organizationSchema = {
   },
   image: { '@id': `${MAIN_SITE_URL}/#logo` },
   description:
-    'ChatHub adalah platform omnichannel yang menyatukan chat WhatsApp, Instagram, Facebook Messenger, Telegram, email, dan web live chat ke satu dashboard, dilengkapi AI chatbot yang membalas otomatis 24/7 dan Smart CRM untuk follow-up prospek.',
+    'Deskripsi singkat bisnis Anda di sini. Jelaskan produk/layanan dan nilai utamanya.',
   areaServed: { '@type': 'Country', name: 'Indonesia' },
   contactPoint: [
     {

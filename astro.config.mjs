@@ -5,11 +5,12 @@ import tailwindcss from '@tailwindcss/vite';
 // Static output, seluruh halaman di-prerender, 0 JS framework.
 // Semua CTA membuka wa.me dengan pesan pembuka sesuai tombolnya, tanpa form.
 //
-// Domain deploy: ads.inchathub.com (landing page traffic iklan berbayar).
-// Situs resmi tetap inchathub.com. Halaman ini sengaja noindex, lihat
-// penjelasan strategi lengkap di src/seo.ts.
+// ── KONFIGURASI DOMAIN ──────────────────────────────────────────────────────
+// Ganti URL di bawah dengan domain deploy Anda (biasanya subdomain ads).
+// Pastikan nilai ini sama dengan SITE_URL di src/seo.ts.
+// ────────────────────────────────────────────────────────────────────────────
 export default defineConfig({
-  site: 'https://ads.inchathub.com',
+  site: 'https://ads.yourdomain.com',
 
   // URL tanpa trailing slash, konsisten dengan <link rel="canonical">.
   trailingSlash: 'never',

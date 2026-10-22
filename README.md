@@ -1,6 +1,6 @@
-# ChatHub Landing Page
+# High-Conversion Landing Page Template
 
-> **Landing page high-conversion** untuk [ChatHub](https://inchathub.com) — Platform **Omnichannel + AI Chatbot + Smart CRM** untuk bisnis Indonesia.
+> **Landing page high-conversion** untuk bisnis SaaS / produk digital Indonesia — siap pakai untuk kampanye iklan berbayar (Google Ads, Meta Ads, TikTok Ads).
 
 [![Astro](https://img.shields.io/badge/Astro-7.x-FF5D01?logo=astro&logoColor=white)](https://astro.build)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.x-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
@@ -11,11 +11,17 @@
 
 ## 📋 Deskripsi
 
-Landing page ini dibangun khusus untuk menangkap traffic **iklan berbayar** (Google Ads, Meta Ads, TikTok Ads) ke ChatHub — platform SaaS Indonesia yang menyatukan semua channel chat bisnis (WhatsApp, Instagram, Facebook, Telegram, Email, Web Live Chat) ke satu dashboard, dilengkapi AI Chatbot 24/7 dan Smart CRM.
+Template landing page yang dibangun khusus untuk menangkap traffic **iklan berbayar** — bukan sekadar halaman cantik, tapi dirancang dengan conversion engineering:
 
-**Dibangun dengan Astro 7 + Tailwind CSS 4** — output statis murni (zero JS framework), hanya vanilla script kecil untuk tab paket, toggle billing tahunan/bulanan, dan animasi reveal-on-scroll. Hasil build sangat ringan dan cepat — krusial untuk Quality Score iklan dan CPC yang efisien.
+- **15 CTA button WhatsApp** dengan pesan berbeda per konteks
+- **Conversion tracking lengkap** — Meta Pixel + GTM + Microsoft Clarity
+- **Performance-first** — zero JS framework, CSS inline, assets data-URI
+- **SEO strategy untuk iklan** — noindex subdomain, canonical ke domain utama, robots.txt granular (izinkan AdsBot Google)
+- **Structured data JSON-LD** lengkap untuk brand authority
 
-**Semua CTA langsung membuka WhatsApp** dengan pesan pembuka yang disesuaikan per tombol — tidak ada form, tidak ada database. Lead tertangkap di percakapan WhatsApp, bukan di spreadsheet.
+**Dibangun dengan Astro 7 + Tailwind CSS 4** — output statis murni, sangat ringan dan cepat.
+
+> Contoh implementasi: landing page Omnichannel + AI Chatbot + Smart CRM (konten bisa diganti sepenuhnya untuk produk/bisnis lain)
 
 ---
 
@@ -31,13 +37,63 @@ Landing page ini dibangun khusus untuk menangkap traffic **iklan berbayar** (Goo
 
 ---
 
+## ⚙️ Cara Adaptasi ke Bisnis Baru (Quick Start)
+
+Cukup ubah **3 file** untuk menyesuaikan ke klien/produk baru:
+
+### 1. [`src/config.ts`](src/config.ts) — Isi ID & Nomor
+
+```ts
+export const WA_NUMBER = 'YOUR_WHATSAPP_NUMBER'; // ganti dengan nomor WA bisnis
+export const META_PIXEL_ID = 'YOUR_META_PIXEL_ID'; // dari Facebook Events Manager
+export const GTM_ID = 'GTM-XXXXXXX';              // dari Google Tag Manager
+export const CLARITY_ID = 'YOUR_CLARITY_ID';       // dari Microsoft Clarity
+
+export const STATS = {
+  businesses: '500+',   // statistik bisnis (sesuaikan)
+  messages: '10jt+',
+  uptime: '98%',
+};
+```
+
+### 2. [`src/seo.ts`](src/seo.ts) — Isi Domain & Identitas Brand
+
+```ts
+export const MAIN_SITE_URL = 'https://yourdomain.com';     // domain utama
+export const SITE_URL      = 'https://ads.yourdomain.com'; // domain landing page iklan
+
+export const SITE = {
+  name: 'YourBrandName',
+  legalName: 'PT Nama Perusahaan',
+  tagline: 'Tagline Produk Anda',
+  themeColor: '#C00000', // warna brand (hex)
+};
+```
+
+### 3. [`astro.config.mjs`](astro.config.mjs) — Isi Domain Deploy
+
+```js
+export default defineConfig({
+  site: 'https://ads.yourdomain.com', // sama dengan SITE_URL di seo.ts
+});
+```
+
+### 4. Konten Section (opsional)
+
+Ganti copy (teks headline, fitur, FAQ, harga) di:
+- [`src/data/plans.ts`](src/data/plans.ts) — paket harga
+- [`src/data/faqs.ts`](src/data/faqs.ts) — FAQ
+- [`src/components/`](src/components/) — semua section (Hero, Problems, Features, dll)
+
+---
+
 ## ⚠️ Checklist Sebelum Publish
 
-1. **Nomor WhatsApp** — Terpasang `628135949396` (0813-5949-396) di `WA_NUMBER` pada [`src/config.ts`](src/config.ts). Pastikan nomor aktif di WhatsApp sebelum iklan dijalankan.
-
-2. **Konfirmasi diskon tahunan 50%** — Toggle "Bulanan/Tahunan (Hemat 50%)" di section Pricing adalah instruksi pemilik produk. Pastikan sudah dikonfirmasi resmi sebelum publish. Konstanta `ANNUAL_DISCOUNT` ada di [`src/data/plans.ts`](src/data/plans.ts).
-
-3. **Verifikasi `noindex`** di produksi: periksa header `X-Robots-Tag` dan `<meta name="robots">` di source halaman.
+1. **Nomor WhatsApp** — Isi `WA_NUMBER` di [`src/config.ts`](src/config.ts) dengan nomor WA bisnis aktif.
+2. **Tracking IDs** — Isi `META_PIXEL_ID`, `GTM_ID`, `CLARITY_ID` di [`src/config.ts`](src/config.ts).
+3. **Domain** — Isi `SITE_URL` di [`src/seo.ts`](src/seo.ts) dan `site` di [`astro.config.mjs`](astro.config.mjs).
+4. **Konfirmasi diskon tahunan 50%** — Toggle "Bulanan/Tahunan (Hemat 50%)" di section Pricing. Konfirmasi resmi sebelum publish. Konstanta `ANNUAL_DISCOUNT` ada di [`src/data/plans.ts`](src/data/plans.ts).
+5. **Verifikasi `noindex`** di produksi setelah deploy.
 
 ---
 
@@ -253,17 +309,18 @@ File ini disimpan sebagai **backend siap pakai** bila form ingin dihidupkan kemb
 
 ---
 
-## 🔗 Link Terkait
+## 🔗 Link Berguna
 
 | Resource | URL |
 |---|---|
-| Website Resmi ChatHub | https://inchathub.com |
-| Landing Page Iklan | https://ads.inchathub.com |
-| WhatsApp Sales | https://wa.me/628135949396 |
+| Google Tag Manager | https://tagmanager.google.com |
+| Meta Events Manager (Pixel) | https://business.facebook.com |
+| Microsoft Clarity | https://clarity.microsoft.com |
+| Facebook Sharing Debugger | https://developers.facebook.com/tools/debug/ |
+| X Card Validator | https://cards-dev.twitter.com/validator |
 | Google Apps Script | https://script.google.com |
 | Vercel Dashboard | https://vercel.com/dashboard |
-| Facebook Sharing Debugger | https://developers.facebook.com/tools/debug/ |
 
 ---
 
-*Built with ❤️ for [ChatHub](https://inchathub.com) — Satukan semua chat bisnis Anda dalam satu dashboard.*
+*Built with ❤️ — Astro 7 + Tailwind CSS 4. High-conversion landing page template untuk bisnis Indonesia.*
