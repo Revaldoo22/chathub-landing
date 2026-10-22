@@ -1,0 +1,147 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  /* Brand ChatHub, merah dominan di atas putih, kuning untuk CTA penting */
+  --color-brand-50: #fdf2f2;
+  --color-brand-100: #fbe0e0;
+  --color-brand-200: #f6bcbc;
+  --color-brand-500: #d61f1f;
+  --color-brand-600: #c00000;
+  --color-brand-700: #a00000;
+  --color-brand-800: #7a0000;
+  --color-brand-900: #520a0a;
+
+  --color-accent-300: #ffd54d;
+  --color-accent-400: #ffc107;
+  --color-accent-500: #f5a800;
+
+  --color-wa-500: #25d366;
+  --color-wa-600: #1eb958;
+}
+
+html {
+  /* Skala global UI: 90% (semua ukuran rem, teks/padding/lebar, ikut skala ini) */
+  font-size: 90%;
+  scroll-behavior: smooth;
+  /* offset untuk sticky header 4rem */
+  scroll-padding-top: 4rem;
+}
+
+/* Cegah auto-zoom iOS saat fokus ke input (zoom terjadi bila font-size input < 16px) */
+input,
+select,
+textarea {
+  font-size: max(1rem, 16px);
+}
+
+/* ============================================================
+   Reveal on scroll, hanya aktif bila JS jalan (html.js),
+   sehingga tanpa JS semua konten tetap terlihat normal.
+   Hanya transform + opacity: ringan di device menengah-bawah.
+   ============================================================ */
+html.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.4s ease-out,
+    transform 0.4s ease-out;
+  transition-delay: var(--rd, 0ms);
+}
+html.js [data-reveal].in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Micro-interaction CTA utama: subtle scale + shadow saat hover */
+.cta-main {
+  transition:
+    transform 0.2s ease-in-out,
+    box-shadow 0.2s ease-in-out,
+    background-color 0.2s ease-in-out;
+}
+.cta-main:hover {
+  transform: scale(1.03);
+}
+
+/* Pulse halus CTA utama, ring memudar via transform/opacity saja */
+.cta-pulse {
+  position: relative;
+}
+.cta-pulse::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 3px solid rgba(255, 193, 7, 0.55);
+  opacity: 0;
+  pointer-events: none;
+  animation: cta-ring 2.8s ease-out infinite;
+}
+@keyframes cta-ring {
+  0% {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  60%,
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+
+/* Indikator scroll di hero */
+@keyframes bounce-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+.scroll-hint {
+  animation: bounce-soft 1.8s ease-in-out infinite;
+}
+
+/* Sticky CTA bar (mobile): slide-in dari bawah setelah lewat hero */
+html.js .sticky-cta {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-out;
+}
+html.js .sticky-cta.show {
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  html.js [data-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .cta-pulse::after,
+  .scroll-hint {
+    animation: none;
+  }
+  .cta-main:hover {
+    transform: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Ruang untuk sticky CTA bar di mobile agar footer tidak tertutup */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: 4.5rem;
+  }
+}

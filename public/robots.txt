@@ -1,0 +1,65 @@
+# robots.txt, ads.inchathub.com
+#
+# Subdomain ini adalah landing page untuk traffic IKLAN BERBAYAR.
+# Situs resmi yang diindeks adalah https://inchathub.com
+#
+# Seluruh crawler pencarian diblokir agar halaman ini tidak berebut
+# kata kunci dengan domain utama (keyword cannibalization).
+# Tag <meta name="robots" content="noindex, follow"> di setiap halaman
+# adalah pengaman utamanya, aturan di bawah lapis kedua.
+
+User-agent: *
+Disallow: /
+
+# --- Pengecualian: crawler platform iklan ---
+# Bot ini WAJIB bisa merayapi landing page untuk memverifikasi kualitas
+# & kepatuhan iklan. Memblokirnya bisa menyebabkan iklan ditolak atau
+# Quality Score turun.
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
+User-agent: AdsBot-Google-Mobile-Apps
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: Google-Adwords-Instant
+Allow: /
+
+# Meta (Facebook/Instagram) Ads, sekaligus untuk preview share link
+User-agent: facebookexternalhit
+Allow: /
+
+User-agent: facebookcatalog
+Allow: /
+
+# TikTok Ads
+User-agent: Bytespider
+Allow: /
+
+User-agent: TikTokSpider
+Allow: /
+
+# Preview link di aplikasi chat (WhatsApp, Telegram, X)
+User-agent: WhatsApp
+Allow: /
+
+User-agent: TelegramBot
+Allow: /
+
+User-agent: Twitterbot
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /
+
+User-agent: Slackbot-LinkExpanding
+Allow: /
+
+# Tanpa Sitemap: halaman ini memang tidak untuk diindeks.
+# Sitemap resmi ada di https://inchathub.com/sitemap.xml

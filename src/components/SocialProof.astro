@@ -1,0 +1,80 @@
+---
+import { STATS } from '../config';
+
+// Testimoni riil belum tersedia dari sumber, sesuai brief, tampilkan
+// kredibilitas industri + statistik agregat resmi, bukan testimoni fiktif.
+const industries = [
+  {
+    name: 'Rumah Sakit & Klinik',
+    desc: 'Volume pertanyaan pasien tinggi, jam layanan ketat',
+    icon: 'M4.5 12.75l6 6 9-13.5',
+  },
+  {
+    name: 'Instansi Pemerintah',
+    desc: 'Standar layanan publik & akuntabilitas',
+    icon: 'M4.5 12.75l6 6 9-13.5',
+  },
+  {
+    name: 'Lembaga Keuangan',
+    desc: 'Keamanan data & kecepatan respon nasabah',
+    icon: 'M4.5 12.75l6 6 9-13.5',
+  },
+  {
+    name: 'Pendidikan',
+    desc: 'Gelombang pertanyaan PMB & orang tua siswa',
+    icon: 'M4.5 12.75l6 6 9-13.5',
+  },
+  {
+    name: 'Retail & E-Commerce',
+    desc: 'Chat penjualan bervolume tinggi tiap hari',
+    icon: 'M4.5 12.75l6 6 9-13.5',
+  },
+  {
+    name: 'Logistik',
+    desc: 'Pelacakan kiriman & update status nonstop',
+    icon: 'M4.5 12.75l6 6 9-13.5',
+  },
+];
+---
+
+<section class="flex md:min-h-[calc(100svh-4rem)] flex-col justify-center bg-brand-600 py-10 text-white md:py-12 lg:py-14" id="dipercaya" data-snap>
+  <div class="mx-auto w-full max-w-7xl px-4 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
+        Dipercaya industri yang tidak boleh salah balas chat
+      </h2>
+      <p class="mt-3 text-base text-brand-100 sm:text-lg">
+        Dari rumah sakit sampai instansi pemerintah, sektor dengan standar layanan paling ketat sudah menjalankan operasional chat-nya di ChatHub.
+      </p>
+    </div>
+
+    <div class="mt-8 grid grid-cols-2 gap-3 lg:grid-cols-3" data-reveal-group>
+      {
+        industries.map((ind) => (
+          <div class="rounded-xl bg-white/10 p-4 backdrop-blur-sm">
+            <svg class="h-5 w-5 text-accent-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d={ind.icon} />
+            </svg>
+            <h3 class="mt-2 text-sm font-bold sm:text-base">{ind.name}</h3>
+            <p class="mt-1 text-xs text-brand-100 sm:text-sm">{ind.desc}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 gap-4 rounded-2xl bg-white/10 p-6 text-center backdrop-blur-sm sm:grid-cols-3" data-reveal>
+      <div>
+        <p class="text-4xl font-extrabold text-accent-400">{STATS.businesses}</p>
+        <p class="mt-1 text-sm font-medium text-brand-100">bisnis aktif menggunakan ChatHub</p>
+      </div>
+      <div>
+        <p class="text-4xl font-extrabold text-accent-400">{STATS.messages}</p>
+        <p class="mt-1 text-sm font-medium text-brand-100">pesan diproses setiap bulan</p>
+      </div>
+      <div>
+        <p class="text-4xl font-extrabold text-accent-400">{STATS.uptime}</p>
+        <p class="mt-1 text-sm font-medium text-brand-100">uptime SLA</p>
+      </div>
+    </div>
+  </div>
+</section>

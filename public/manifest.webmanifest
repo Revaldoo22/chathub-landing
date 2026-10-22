@@ -1,0 +1,21 @@
+{
+  "name": "ChatHub, Omnichannel + AI Chatbot + Smart CRM",
+  "short_name": "ChatHub",
+  "description": "Satukan chat WhatsApp, Instagram, Facebook, Telegram & email ke satu dashboard. AI membalas otomatis 24/7.",
+  "start_url": "/?utm_source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#C00000",
+  "lang": "id",
+  "dir": "ltr",
+  "categories": ["business", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

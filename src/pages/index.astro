@@ -1,0 +1,52 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import Problems from '../components/Problems.astro';
+import Solution from '../components/Solution.astro';
+import HowItWorks from '../components/HowItWorks.astro';
+import Features from '../components/Features.astro';
+import SocialProof from '../components/SocialProof.astro';
+import Pricing from '../components/Pricing.astro';
+import FAQ from '../components/FAQ.astro';
+import FinalCTA from '../components/FinalCTA.astro';
+import StickyBar from '../components/StickyBar.astro';
+import Footer from '../components/Footer.astro';
+
+import { MAIN_SITE_URL, ORG_ID, abs, webPageSchema, serviceSchema } from '../seo';
+import { softwareSchema } from '../data/plans';
+
+const title = 'ChatHub: Balas Semua Chat Otomatis 24/7 dari Satu Dashboard';
+const description =
+  'Satukan chat WhatsApp, Instagram, Facebook, Telegram & email ke satu dashboard. AI membalas otomatis 24/7, Smart CRM menjaga follow-up. Coba gratis tanpa kartu kredit, setup 1 hari kerja.';
+
+// Halaman ini noindex (landing page iklan), jadi schema dibatasi pada yang
+// tetap berguna di luar SERP: identitas brand & deskripsi produk untuk
+// mesin jawaban AI. Schema khusus rich result (BreadcrumbList, HowTo,
+// FAQPage) dilepas karena mustahil muncul pada halaman noindex.
+//
+// @id produk & entitas memakai domain utama agar sinyal brand menyatu
+// dengan inchathub.com.
+const schema = [
+  webPageSchema({ url: abs('/'), name: title, description }),
+  softwareSchema(MAIN_SITE_URL, ORG_ID),
+  serviceSchema,
+];
+---
+
+<Layout title={title} description={description} canonicalPath="/" schema={schema}>
+  <Header />
+  <main id="konten">
+    <Hero />
+    <Problems />
+    <Solution />
+    <HowItWorks />
+    <Features />
+    <SocialProof />
+    <Pricing />
+    <FAQ />
+    <FinalCTA />
+  </main>
+  <Footer />
+  <StickyBar />
+</Layout>

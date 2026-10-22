@@ -1,0 +1,302 @@
+---
+import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
+import { SITE, OG_IMAGE, INDEXABLE, organizationSchema, websiteSchema, abs, absMain } from '../seo';
+import { GTM_ID, CLARITY_ID } from '../config';
+
+// ⚠️ Meta Pixel di bawah adalah SATU-SATUNYA sumber fbq('init') untuk situs
+// ini. JANGAN menambahkan tag Meta Pixel di container GTM: pixel akan
+// termuat dua kali, setiap konversi terhitung dobel, dan cost-per-lead di
+// Ads Manager terlihat separuh dari kenyataan.
+// Gejala di konsol browser: "[Meta Pixel] - Duplicate Pixel ID".
+
+interface Props {
+  title: string;
+  description: string;
+  /** Path kanonik halaman ini, mis. '/' atau '/kebijakan-privasi'. */
+  canonicalPath?: string;
+  /** Paksa noindex pada halaman tertentu (404, thank-you page, dsb). */
+  noindex?: boolean;
+  /** JSON-LD tambahan spesifik halaman. */
+  schema?: Record<string, unknown>[];
+  /** Override gambar share, path relatif dari root. */
+  image?: string;
+}
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  noindex = false,
+  schema = [],
+  image = OG_IMAGE.url,
+} = Astro.props;
+
+// Canonical mengarah ke DOMAIN UTAMA, bukan subdomain ads ini.
+// Ini yang memberi tahu Google: "versi resmi halaman ini ada di
+// inchathub.com", jadi tidak ada dua URL berebut kata kunci yang sama.
+const canonical = absMain(canonicalPath);
+
+// og:image tetap dari subdomain ini, file fisiknya memang ada di sini.
+const ogImage = abs(image);
+
+// Satu graph JSON-LD untuk seluruh halaman. Menggabungkan entitas global
+// (Organization, WebSite) dengan schema spesifik halaman, saling terhubung
+// lewat @id, jadi Google membacanya sebagai satu kesatuan, bukan potongan lepas.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [organizationSchema, websiteSchema, ...schema],
+};
+
+// Subdomain ads: noindex secara default (INDEXABLE = false di src/seo.ts).
+// `follow` tetap dipertahankan agar link keluar ke inchathub.com tetap
+// dirayapi, jadi halaman ini menyalurkan sinyal ke domain utama alih-alih
+// menjadi jalan buntu.
+const robots = noindex || !INDEXABLE
+  ? 'noindex, follow'
+  : 'index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1';
+---
+
+<!doctype html>
+<html lang={SITE.lang} class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google Tag Manager, ditaruh paling atas sesuai anjuran Google supaya
+         container termuat sebelum elemen lain sempat menunda eksekusinya. -->
+    <script is:inline define:vars={{ gtmId: GTM_ID }}>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', gtmId);
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <!-- Prioritas render: CSS kritikal duluan, resource hint sebelum sisanya -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://wa.me" />
+    <link rel="dns-prefetch" href="https://connect.facebook.net" />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    <link rel="dns-prefetch" href="https://www.clarity.ms" />
+
+    <!-- Metadata inti -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content={robots} />
+    <meta name="googlebot" content={robots} />
+
+    <!-- Identitas & lokalitas: memperkuat relevansi geo/bahasa di SERP Indonesia -->
+    <meta name="author" content={SITE.legalName} />
+    <meta name="publisher" content={SITE.legalName} />
+    <meta name="language" content="Indonesian" />
+    <meta name="geo.region" content="ID" />
+    <meta name="geo.placename" content="Indonesia" />
+    {
+      /* hreflang hanya relevan untuk halaman yang diindeks. */
+      INDEXABLE && (
+        <>
+          <link rel="alternate" hreflang="id-ID" href={canonical} />
+          <link rel="alternate" hreflang="x-default" href={canonical} />
+        </>
+      )
+    }
+
+    <!-- Open Graph (Facebook, WhatsApp, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:type" content={OG_IMAGE.type} />
+    <meta property="og:image:width" content={String(OG_IMAGE.width)} />
+    <meta property="og:image:height" content={String(OG_IMAGE.height)} />
+    <meta property="og:image:alt" content={OG_IMAGE.alt} />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={OG_IMAGE.alt} />
+    {SITE.twitter && <meta name="twitter:site" content={SITE.twitter} />}
+
+    <!-- Ikon & PWA -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content={SITE.themeColor} />
+    <meta name="apple-mobile-web-app-title" content={SITE.name} />
+    <meta name="format-detection" content="telephone=no" />
+
+    <!-- Structured data: satu graph, semua entitas terhubung via @id -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} is:inline />
+
+    <script is:inline>
+      // Gate untuk animasi: tanpa JS, konten tampil normal tanpa reveal
+      document.documentElement.classList.add('js');
+    </script>
+
+    <!-- Meta Pixel Code -->
+    <script is:inline>
+      !(function (f, b, e, v, n, t, s) {
+        if (f.fbq) return;
+        n = f.fbq = function () {
+          n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+        };
+        if (!f._fbq) f._fbq = n;
+        n.push = n;
+        n.loaded = !0;
+        n.version = '2.0';
+        n.queue = [];
+        t = b.createElement(e);
+        t.async = !0;
+        t.src = v;
+        s = b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t, s);
+      })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+      fbq('init', '2947105598961528');
+      fbq('track', 'PageView');
+    </script>
+    <!-- End Meta Pixel Code -->
+
+    <!-- Microsoft Clarity -->
+    <script is:inline define:vars={{ clarityId: CLARITY_ID }}>
+      (function (c, l, a, r, i, t, y) {
+        c[a] =
+          c[a] ||
+          function () {
+            (c[a].q = c[a].q || []).push(arguments);
+          };
+        t = l.createElement(r);
+        t.async = 1;
+        t.src = 'https://www.clarity.ms/tag/' + i;
+        y = l.getElementsByTagName(r)[0];
+        y.parentNode.insertBefore(t, y);
+      })(window, document, 'clarity', 'script', clarityId);
+    </script>
+    <!-- End Microsoft Clarity -->
+
+    <!-- Vercel Web Analytics, hanya aktif saat di-deploy ke Vercel -->
+    <Analytics />
+  </head>
+  <body class="bg-white font-sans text-slate-900 antialiased">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+        title="Google Tag Manager"></iframe
+      ></noscript
+    >
+    <!-- End Google Tag Manager (noscript) -->
+    <!-- Meta Pixel (noscript fallback) -->
+    <noscript
+      ><img
+        height="1"
+        width="1"
+        style="display:none"
+        alt=""
+        src="https://www.facebook.com/tr?id=2947105598961528&ev=PageView&noscript=1"
+      /></noscript
+    >
+    <!-- Skip link: aksesibilitas + sinyal struktur halaman yang jelas ke crawler -->
+    <a
+      href="#konten"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-100 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
+    >
+      Lompat ke konten utama
+    </a>
+    <slot />
+    <script>
+      // ---- Conversion tracking Meta Pixel + GTM ----------------------
+      // Semua CTA membuka WhatsApp langsung, jadi konversi terjadi tepat
+      // saat tombol diklik. Delegated listener: satu handler untuk SEMUA
+      // CTA, termasuk yang ditambahkan nanti. Lihat src/tracking.ts.
+      import { EVENTS, track } from '../tracking';
+
+      // Dedupe per anchor: user gelisah sering klik tombol yang sama 2-3x
+      // sebelum tab WhatsApp terbuka. Tanpa ini satu lead terhitung
+      // berkali-kali dan biaya per lead di Ads Manager terlihat palsu.
+      const fired = new WeakSet<Element>();
+
+      document.addEventListener(
+        'click',
+        (e) => {
+          const target = e.target as Element | null;
+          const cta = target?.closest?.('a[href*="wa.me"]');
+          if (!(cta instanceof HTMLAnchorElement) || fired.has(cta)) return;
+          fired.add(cta);
+
+          const d = cta.dataset;
+          const plan = d.trackPlan;
+          const value = Number(d.trackValue);
+
+          // CTA harga menandai dirinya InitiateCheckout lewat data-track,
+          // sisanya Lead.
+          track(d.track || EVENTS.lead, {
+            content_name: d.trackName || cta.textContent?.trim().slice(0, 60) || 'CTA WhatsApp',
+            ...(plan ? { content_category: plan } : {}),
+            ...(Number.isFinite(value) && value > 0 ? { value, currency: 'IDR' } : {}),
+          });
+        },
+        // Capture: CTA membuka tab baru lewat target="_blank", jadi handler
+        // harus jalan sebelum browser memindah fokus dari halaman.
+        { capture: true }
+      );
+
+      // Pengunjung yang benar-benar sampai ke bagian harga = intent tinggi,
+      // audience retargeting paling berharga untuk landing page ini.
+      const pricing = document.getElementById('harga');
+      if (pricing) {
+        const po = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting) return;
+            track(EVENTS.viewContent, { content_name: 'Bagian Harga' });
+            po.disconnect();
+          },
+          { threshold: 0.4 }
+        );
+        po.observe(pricing);
+      }
+    </script>
+
+    <script>
+      // Reveal on scroll, IntersectionObserver native, tanpa library.
+      // [data-reveal] = elemen tunggal; [data-reveal-group] = stagger anak-anaknya (~70ms).
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          }
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -5% 0px' }
+      );
+
+      document.querySelectorAll<HTMLElement>('[data-reveal-group]').forEach((group) => {
+        Array.from(group.children).forEach((child, i) => {
+          child.setAttribute('data-reveal', '');
+          (child as HTMLElement).style.setProperty('--rd', `${Math.min(i * 70, 420)}ms`);
+        });
+      });
+
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

@@ -1,0 +1,435 @@
+---
+import { waLink } from '../config';
+// Data paket diimpor dari src/data/plans.ts, satu sumber untuk tampilan
+// dan schema SoftwareApplication/Offer (lihat index.astro).
+import { plans } from '../data/plans';
+
+
+// Matrix perbandingan untuk tabel desktop.
+// Nilai per baris: [label, Starter, Pro, Business, Enterprise]
+// true = centang, false = silang, string = teks nilai
+type Cell = string | boolean;
+const groups: { title: string; rows: [string, Cell, Cell, Cell, Cell][] }[] = [
+  {
+    title: 'Channel',
+    rows: [
+      ['WhatsApp Official (WABA)', '1x', '3x', '5x', '10x'],
+      ['WA Unofficial Regular', '1x', '2x', '3x', '10x'],
+      ['WA Unofficial Business', '1x', '2x', '3x', '10x'],
+      ['Telegram', '1x', '2x', '3x', '5x'],
+      ['Instagram', '1x', '1x', '1x', '3x'],
+      ['FB Messenger', '1x', '1x', '1x', '3x'],
+      ['Email', '1x', '1x', '1x', '1x'],
+      ['Web Live Chat', '1x', '1x', '1x', '1x'],
+      ['X (Twitter)', false, false, false, '1x'],
+      ['Threads', false, false, false, '1x'],
+      ['Microsoft Teams', false, false, false, '1x'],
+    ],
+  },
+  {
+    title: 'Kapasitas',
+    rows: [
+      ['AI Agent', '3x', '10x', '20x', 'Unlimited'],
+      ['Chatbot Model', '3x', '10x', '20x', 'Unlimited'],
+      ['User Account', '3x', '5x', '10x', 'Unlimited'],
+      ['WhatsApp Template', '10x', '50x', '100x', 'Unlimited'],
+      ['Storage', '1 GB', '3 GB', '5 GB', 'Unlimited'],
+    ],
+  },
+  {
+    title: 'Kuota per bulan',
+    rows: [
+      ['AI Response', '1.000x', '3.000x', '10.000x', 'Unlimited'],
+      ['Message', '3.000x', '5.000x', '10.000x', 'Unlimited'],
+      ['Email', '1.000x', '3.000x', '5.000x', 'Unlimited'],
+    ],
+  },
+  {
+    title: 'Otomasi & Integrasi',
+    rows: [
+      ['Scraping Data', false, false, '30x/hari', '50x/hari'],
+      ['Integrasi Google Sheets', false, false, true, true],
+      ['Shipping Cost Calculator', false, false, true, true],
+      ['API Integration', false, false, true, true],
+      ['Custom Workflow', false, false, true, true],
+      ['Dedicated Account Manager', false, false, true, true],
+      ['Custom Domain', false, false, false, true],
+      ['Custom Logo (Branding)', false, false, false, true],
+      ['Private Dedicated Server', false, false, false, true],
+    ],
+  },
+  {
+    title: 'Support',
+    rows: [['Level dukungan', 'Standard (Email)', 'Priority', 'Priority + Live', 'SLA Guaranteed']],
+  },
+];
+---
+
+<section class="flex md:min-h-[calc(100svh-4rem)] flex-col justify-center bg-slate-50 py-10 md:py-12 lg:py-14" id="harga" data-snap>
+  <div class="mx-auto w-full max-w-7xl px-4 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <h2 class="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+        Lebih murah dari gaji 1 karyawan. <span class="text-brand-600">Kerja 24 jam nonstop.</span>
+      </h2>
+      <p class="mt-3 text-sm text-slate-600 sm:text-base">
+        Bedanya antar paket sederhana: semakin tinggi paket, semakin besar kapasitas channel &amp; kuota AI-nya,
+        semakin dalam otomasi &amp; integrasinya (Google Sheets, API, custom workflow mulai tersedia di Business),
+        dan semakin tinggi tingkat dukungan sampai SLA &amp; branding sendiri di Enterprise.
+      </p>
+    </div>
+
+    <!-- Toggle billing (mobile): Bulanan / Tahunan (Hemat 50%) -->
+    <div class="mt-6 flex justify-center lg:hidden" data-reveal>
+      <div class="billing-toggle relative inline-grid grid-cols-2 rounded-full border border-slate-200 bg-white p-1">
+        <span
+          class="absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-brand-600 transition-transform duration-200 ease-out"
+          data-knob
+          aria-hidden="true"></span>
+        <button type="button" data-cycle="bulanan" aria-pressed="true" class="relative z-10 cursor-pointer rounded-full px-5 py-2 text-sm font-bold text-white transition-colors duration-200">
+          Bulanan
+        </button>
+        <button type="button" data-cycle="tahunan" aria-pressed="false" class="relative z-10 cursor-pointer rounded-full px-5 py-2 text-sm font-bold text-slate-600 transition-colors duration-200">
+          Tahunan
+          <span class="ml-1 rounded-full bg-accent-400 px-2 py-0.5 text-[10px] font-extrabold text-slate-900 uppercase">Hemat 50%</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Tab switcher paket (mobile/tablet), Pro aktif default -->
+    <div class="mx-auto mt-6 max-w-3xl lg:hidden" data-reveal>
+      <div
+        class="grid grid-cols-4 gap-1 rounded-xl border border-slate-200 bg-white p-1"
+        role="tablist"
+        aria-label="Pilihan paket ChatHub"
+        id="plan-tabs"
+      >
+        {
+          plans.map((p) => (
+            <button
+              type="button"
+              role="tab"
+              id={`tab-${p.id}`}
+              aria-controls={`panel-${p.id}`}
+              aria-selected={p.popular ? 'true' : 'false'}
+              data-plan={p.id}
+              class:list={[
+                'relative cursor-pointer rounded-lg px-2 py-2.5 text-xs font-bold transition-colors duration-200 sm:text-sm',
+                p.popular ? 'bg-brand-600 text-white' : 'text-slate-600 hover:text-brand-600',
+              ]}
+            >
+              {p.name}
+              {p.popular && (
+                <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-accent-400 px-1.5 py-px text-[9px] font-extrabold whitespace-nowrap text-slate-900 uppercase">
+                  Populer
+                </span>
+              )}
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        plans.map((p) => (
+          <div
+            role="tabpanel"
+            id={`panel-${p.id}`}
+            aria-labelledby={`tab-${p.id}`}
+            class:list={[
+              'mt-4 rounded-2xl border bg-white p-5 sm:p-6',
+              p.popular ? 'border-brand-600 shadow-xl shadow-brand-600/10 ring-2 ring-brand-600' : 'hidden border-slate-200 shadow-lg',
+            ]}
+          >
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h3 class="text-xl font-extrabold text-slate-900">{p.name}</h3>
+              <div class="text-right">
+                <p data-price-monthly>
+                  <span class="text-3xl font-extrabold text-slate-900">{p.priceMonthlyLabel}</span>
+                  <span class="text-sm text-slate-500">/bulan</span>
+                </p>
+                <p data-price-annual class="hidden">
+                  <span class="text-3xl font-extrabold text-slate-900">{p.priceAnnualPerMonthLabel}</span>
+                  <span class="text-sm text-slate-500">/bulan</span>
+                  <span class="block text-xs text-slate-500">ditagih {p.priceAnnualBilledLabel}/tahun</span>
+                </p>
+              </div>
+            </div>
+            <p class="mt-1.5 text-sm leading-relaxed text-slate-600">
+              <strong class="font-semibold text-slate-800">Cocok untuk:</strong> {p.fit}
+            </p>
+
+            <div class="mt-4 space-y-4">
+              <div>
+                <h4 class="text-xs font-extrabold tracking-wide text-slate-500 uppercase">Channel</h4>
+                <div class="mt-2 flex flex-wrap gap-1.5">
+                  {p.channels.map((c) => (
+                    <span class="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium whitespace-nowrap text-slate-700">{c}</span>
+                  ))}
+                </div>
+              </div>
+
+              <div class="grid gap-3 sm:grid-cols-2">
+                <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                  <h4 class="text-xs font-extrabold tracking-wide text-slate-500 uppercase">Kapasitas</h4>
+                  <dl class="mt-2 space-y-1.5">
+                    {p.capacity.map(([k, v]) => (
+                      <div class="flex items-baseline justify-between gap-3 text-[13px]">
+                        <dt class="text-slate-500">{k}</dt>
+                        <dd class="font-semibold text-slate-800">{v}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+                <div class="flex flex-col gap-3">
+                  <div class="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                    <h4 class="text-xs font-extrabold tracking-wide text-slate-500 uppercase">Kuota per bulan</h4>
+                    <dl class="mt-2 space-y-1.5">
+                      {p.quotas.map(([k, v]) => (
+                        <div class="flex items-baseline justify-between gap-3 text-[13px]">
+                          <dt class="text-slate-500">{k}</dt>
+                          <dd class="font-semibold text-slate-800">{v}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
+                  <div class="flex-1 rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                    <h4 class="text-xs font-extrabold tracking-wide text-slate-500 uppercase">Support</h4>
+                    <p class="mt-2 text-[13px] leading-relaxed text-slate-700">{p.support}</p>
+                  </div>
+                </div>
+              </div>
+
+              {p.automationIncluded.length > 0 && (
+                <div>
+                  <h4 class="text-xs font-extrabold tracking-wide text-slate-500 uppercase">Otomasi &amp; integrasi</h4>
+                  <div class="mt-2 flex flex-wrap gap-1.5">
+                    {p.automationIncluded.map((item) => (
+                      <span class="inline-flex items-center gap-1 rounded-full border border-brand-100 bg-brand-50 px-2.5 py-1 text-xs font-medium whitespace-nowrap text-brand-800">
+                        <svg class="h-3 w-3 shrink-0 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" aria-hidden="true">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                        </svg>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {p.automationExcluded.length > 0 && (
+                <div>
+                  <h4 class="text-xs font-extrabold tracking-wide text-slate-400 uppercase">Belum termasuk</h4>
+                  <div class="mt-2 flex flex-wrap gap-1.5">
+                    {p.automationExcluded.map((item) => (
+                      <span class="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs whitespace-nowrap text-slate-400">
+                        <svg class="h-3 w-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                        </svg>
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <a
+              href={waLink(`Halo tim ChatHub, saya tertarik paket ${p.name}. Boleh info lengkap & cara mulainya?`)}
+              data-track="InitiateCheckout"
+              data-track-name={`Pilih paket ${p.name}`}
+              data-track-plan={p.name}
+              data-track-value={p.priceMonthly}
+              target="_blank"
+              rel="noopener"
+              class="cta-main mt-5 inline-flex w-full items-center justify-center rounded-xl bg-brand-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-600/20 hover:bg-brand-700 sm:text-base"
+            >
+              Pilih {p.name} &amp; mulai hari ini
+            </a>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Tabel perbandingan (desktop) -->
+    <div class="mt-8 hidden overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60 lg:block" data-reveal>
+      <table class="w-full border-collapse text-left">
+        <thead>
+          <tr class="border-b border-slate-200">
+            <th scope="col" class="w-56 p-6 align-top">
+              <p class="text-xl font-extrabold text-slate-900">Pilih Paket Anda</p>
+              <div class="billing-toggle relative mt-4 inline-grid grid-cols-2 rounded-full border border-slate-200 bg-white p-1">
+                <span
+                  class="absolute inset-y-1 left-1 w-[calc(50%-0.25rem)] rounded-full bg-brand-600 transition-transform duration-200 ease-out"
+                  data-knob
+                  aria-hidden="true"></span>
+                <button type="button" data-cycle="bulanan" aria-pressed="true" class="relative z-10 cursor-pointer rounded-full px-4 py-1.5 text-xs font-bold text-white transition-colors duration-200">
+                  Bulanan
+                </button>
+                <button type="button" data-cycle="tahunan" aria-pressed="false" class="relative z-10 cursor-pointer rounded-full px-4 py-1.5 text-xs font-bold text-slate-600 transition-colors duration-200">
+                  Tahunan
+                </button>
+              </div>
+              <p class="mt-2 text-xs text-slate-500">
+                Billing tahunan <span class="rounded-full bg-accent-400 px-1.5 py-0.5 text-[10px] font-extrabold text-slate-900 uppercase">Hemat 50%</span>
+              </p>
+            </th>
+            {
+              plans.map((p) => (
+                <th scope="col" class:list={['relative p-5 text-center align-top', p.popular && 'bg-brand-50/70']}>
+                  {p.popular && (
+                    <span class="absolute top-2 left-1/2 -translate-x-1/2 rounded-full bg-accent-400 px-2 py-0.5 text-[9px] font-extrabold whitespace-nowrap text-slate-900 uppercase">
+                      Paling Populer
+                    </span>
+                  )}
+                  <p class="mt-3 text-lg font-extrabold text-slate-900">{p.name}</p>
+                  <p class="mx-auto mt-1 min-h-8 max-w-44 text-xs leading-snug font-normal text-slate-500">{p.fitShort}</p>
+                  <div class="mt-2 min-h-12">
+                    <p data-price-monthly>
+                      <span class="text-xl font-extrabold text-brand-600">{p.priceMonthlyLabel}</span>
+                      <span class="text-xs font-normal text-slate-500">/bln</span>
+                    </p>
+                    <p data-price-annual class="hidden">
+                      <span class="text-xl font-extrabold text-brand-600">{p.priceAnnualPerMonthLabel}</span>
+                      <span class="text-xs font-normal text-slate-500">/bln</span>
+                      <span class="block text-[10px] font-normal text-slate-500">ditagih {p.priceAnnualBilledLabel}/tahun</span>
+                    </p>
+                  </div>
+                  <a
+                    href={waLink(`Halo tim ChatHub, saya tertarik paket ${p.name}. Boleh info lengkap & cara mulainya?`)}
+              data-track="InitiateCheckout"
+              data-track-name={`Pilih paket ${p.name}`}
+              data-track-plan={p.name}
+              data-track-value={p.priceMonthly}
+                    target="_blank"
+                    rel="noopener"
+                    class:list={[
+                      'cta-main inline-flex w-full items-center justify-center rounded-lg px-3 py-2 text-xs font-bold transition-colors duration-200',
+                      p.popular
+                        ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20 hover:bg-brand-700'
+                        : 'border border-brand-600 text-brand-600 hover:bg-brand-600 hover:text-white',
+                    ]}
+                  >
+                    Mulai Sekarang
+                  </a>
+                </th>
+              ))
+            }
+          </tr>
+        </thead>
+        <tbody>
+          {
+            groups.map((g) => (
+              <>
+                <tr>
+                  <th
+                    scope="colgroup"
+                    colspan="5"
+                    class="border-y border-slate-200 bg-slate-50 px-6 py-2.5 text-left text-sm font-extrabold text-slate-900"
+                  >
+                    {g.title}
+                  </th>
+                </tr>
+                {g.rows.map((row) => (
+                  <tr class="border-b border-slate-100 last:border-0">
+                    <th scope="row" class="px-6 py-2.5 text-left text-[13px] font-medium text-slate-600">
+                      {row[0]}
+                    </th>
+                    {row.slice(1).map((cell, i) => (
+                      <td class:list={['px-4 py-2.5 text-center text-[13px] text-slate-700', plans[i].popular && 'bg-brand-50/40 font-semibold']}>
+                        {cell === true ? (
+                          <svg class="mx-auto h-4.5 w-4.5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-label="Termasuk">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                          </svg>
+                        ) : cell === false ? (
+                          <svg class="mx-auto h-4 w-4 text-slate-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-label="Tidak termasuk">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                          </svg>
+                        ) : (
+                          cell
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </>
+            ))
+          }
+        </tbody>
+        <tfoot>
+          <tr class="border-t border-slate-200">
+            <td class="p-5"></td>
+            {
+              plans.map((p) => (
+                <td class:list={['p-5 text-center align-middle', p.popular && 'bg-brand-50/70']}>
+                  <a
+                    href={waLink(`Halo tim ChatHub, saya tertarik paket ${p.name}. Boleh info lengkap & cara mulainya?`)}
+              data-track="InitiateCheckout"
+              data-track-name={`Pilih paket ${p.name}`}
+              data-track-plan={p.name}
+              data-track-value={p.priceMonthly}
+                    target="_blank"
+                    rel="noopener"
+                    class:list={[
+                      'cta-main inline-flex w-full items-center justify-center rounded-lg px-3 py-2 text-xs font-bold transition-colors duration-200',
+                      p.popular
+                        ? 'bg-brand-600 text-white shadow-md shadow-brand-600/20 hover:bg-brand-700'
+                        : 'border border-brand-600 text-brand-600 hover:bg-brand-600 hover:text-white',
+                    ]}
+                  >
+                    Mulai Sekarang
+                  </a>
+                </td>
+              ))
+            }
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <p class="mt-6 text-center text-sm text-slate-500" data-reveal>
+      Semua paket termasuk onboarding &amp; support teknis. Langganan bulanan, naik/turun paket kapan saja.
+    </p>
+  </div>
+</section>
+
+<script>
+  // Tab switcher paket, vanilla, tanpa library
+  const tablist = document.getElementById('plan-tabs');
+  if (tablist) {
+    const tabs = Array.from(tablist.querySelectorAll<HTMLButtonElement>('[role="tab"]'));
+    const activate = (tab: HTMLButtonElement) => {
+      tabs.forEach((t) => {
+        const selected = t === tab;
+        t.setAttribute('aria-selected', String(selected));
+        t.classList.toggle('bg-brand-600', selected);
+        t.classList.toggle('text-white', selected);
+        t.classList.toggle('text-slate-600', !selected);
+        document.getElementById(`panel-${t.dataset.plan}`)?.classList.toggle('hidden', !selected);
+      });
+    };
+    tabs.forEach((tab) => tab.addEventListener('click', () => activate(tab)));
+  }
+
+  // Toggle billing bulanan/tahunan: dua instance (mobile + tabel desktop) tersinkron.
+  // Knob geser via transform, harga bulanan/tahunan di-switch.
+  const toggles = Array.from(document.querySelectorAll<HTMLElement>('.billing-toggle'));
+  if (toggles.length) {
+    const setCycle = (cycle: string) => {
+      const annual = cycle === 'tahunan';
+      toggles.forEach((toggle) => {
+        const knob = toggle.querySelector<HTMLElement>('[data-knob]');
+        if (knob) knob.style.transform = annual ? 'translateX(100%)' : 'translateX(0)';
+        toggle.querySelectorAll<HTMLButtonElement>('[data-cycle]').forEach((b) => {
+          const active = b.dataset.cycle === cycle;
+          b.setAttribute('aria-pressed', String(active));
+          b.classList.toggle('text-white', active);
+          b.classList.toggle('text-slate-600', !active);
+        });
+      });
+      document.querySelectorAll('[data-price-monthly]').forEach((el) => el.classList.toggle('hidden', annual));
+      document.querySelectorAll('[data-price-annual]').forEach((el) => el.classList.toggle('hidden', !annual));
+    };
+    toggles.forEach((toggle) =>
+      toggle.querySelectorAll<HTMLButtonElement>('[data-cycle]').forEach((b) => b.addEventListener('click', () => setCycle(b.dataset.cycle!)))
+    );
+  }
+
+</script>

@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dir /s *.html)",
+      "Bash(node \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\claude\\\\c--Users-user-Desktop-CIHUY-inchathub-lp\\\\13910d8b-6874-45a0-b569-b3f7155cb3d6\\\\scratchpad\\\\og.mjs\")",
+      "Bash(node ./_og-gen.mjs)",
+      "Bash(npm i *)",
+      "Bash(npm rm *)"
+    ]
+  }
+}

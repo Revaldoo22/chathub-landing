@@ -1,0 +1,117 @@
+---
+import { waLink } from '../config';
+
+const features = [
+  {
+    name: 'Omnichannel Inbox',
+    benefit: 'Chat dari berbagai channel masuk ke satu dashboard.',
+    detail:
+      'WhatsApp (Official & Unofficial), Instagram, Facebook Messenger, Telegram, Email, Web Live Chat, X/Twitter, Threads, MS Teams, tidak ada lagi pesan tercecer di HP admin.',
+    icon: 'M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z',
+  },
+  {
+    name: 'AI Chatbot 24/7',
+    benefit: 'Balas otomatis dalam hitungan detik, siang-malam.',
+    detail:
+      'Menjawab dari basis pengetahuan bisnis Anda sendiri, mengualifikasi lead, lalu eskalasi ke agent manusia saat perlu sentuhan personal.',
+    icon: 'M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z',
+  },
+  {
+    name: 'Smart CRM & Pipeline',
+    benefit: 'Follow-up otomatis, konversi terpantau per tahap.',
+    detail:
+      'Setiap prospek tercatat otomatis, reminder follow-up jalan sendiri, dan analitik konversi menunjukkan persis di mana penjualan macet.',
+    icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z',
+  },
+  {
+    name: 'Broadcast Personalisasi',
+    benefit: 'Promo massal yang terasa personal, bukan spam.',
+    detail:
+      'Kirim promo atau pengumuman ke ribuan kontak sekaligus, dengan nama dan konteks masing-masing pelanggan.',
+    icon: 'M10.34 15.84c-.688-.06-1.386-.09-2.09-.09H7.5a4.5 4.5 0 1 1 0-9h.75c.704 0 1.402-.03 2.09-.09m0 9.18c.253.962.584 1.892.985 2.783.247.55.06 1.21-.463 1.511l-.657.38c-.551.318-1.26.117-1.527-.461a20.845 20.845 0 0 1-1.44-4.282m3.102.069a18.03 18.03 0 0 1-.59-4.59c0-1.586.205-3.124.59-4.59m0 9.18a23.848 23.848 0 0 1 8.835 2.535M10.34 6.66a23.847 23.847 0 0 0 8.835-2.535m0 0A23.74 23.74 0 0 0 18.795 3m.38 1.125a23.91 23.91 0 0 1 1.014 5.395m-1.014 8.855c-.118.38-.245.754-.38 1.125m.38-1.125a23.91 23.91 0 0 0 1.014-5.395m0-3.46c.495.413.811 1.035.811 1.73 0 .695-.316 1.317-.811 1.73m0-3.46a24.347 24.347 0 0 1 0 3.46',
+  },
+];
+
+const extras = [
+  'Data Scraper',
+  'Integrasi Google Sheets & API',
+  'Cek ongkir otomatis',
+  'White label & custom domain',
+  'Role management tim',
+];
+---
+
+<section class="flex md:min-h-[calc(100svh-4rem)] flex-col justify-center py-10 md:py-12 lg:py-14" id="fitur" data-snap>
+  <div class="mx-auto w-full max-w-7xl px-4 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <h2 class="text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+        Empat mesin utama di balik <span class="text-brand-600">ChatHub</span>
+      </h2>
+      <p class="mt-3 text-base text-slate-600 sm:text-lg">
+        Satu baris manfaat per fitur, tap / arahkan kursor untuk detailnya.
+      </p>
+    </div>
+
+    <div class="mt-8 grid gap-4 sm:grid-cols-2" data-reveal-group>
+      {
+        features.map((f) => (
+          <details class="group rounded-2xl border border-slate-200 bg-white transition-shadow duration-200 open:shadow-md hover:shadow-md">
+            <summary class="flex cursor-pointer items-center gap-4 p-5 select-none [&::-webkit-details-marker]:hidden">
+              <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-600">
+                <svg class="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d={f.icon} />
+                </svg>
+              </span>
+              <span class="min-w-0 flex-1">
+                <span class="block text-base font-bold text-slate-900">{f.name}</span>
+                <span class="block text-sm text-slate-600">{f.benefit}</span>
+              </span>
+              <svg
+                class="h-5 w-5 shrink-0 text-slate-400 transition-transform duration-200 group-open:rotate-180"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                aria-hidden="true"
+              >
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
+            </summary>
+            <p class="px-5 pb-5 text-sm leading-relaxed text-slate-600">{f.detail}</p>
+          </details>
+        ))
+      }
+    </div>
+
+    <div class="mt-6 flex flex-wrap items-center justify-center gap-2" data-reveal>
+      <span class="text-sm font-semibold text-slate-500">Plus:</span>
+      {
+        extras.map((e) => (
+          <span class="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-xs text-slate-600 sm:text-sm">{e}</span>
+        ))
+      }
+    </div>
+
+    <!-- Mini-CTA kontekstual: fitur AI → minta demo -->
+    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row" data-reveal>
+      <a
+        href={waLink('Halo tim ChatHub, saya tertarik dengan fitur AI Chatbot & Omnichannel Inbox. Boleh minta demo?')}
+        data-track-name="Features - Demo"
+        target="_blank"
+        rel="noopener"
+        class="cta-main inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-600/20 hover:bg-brand-700 sm:text-base"
+      >
+        Lihat AI Chatbot bekerja, request demo
+      </a>
+      <a
+        href={waLink('Halo tim ChatHub, saya mau langsung coba gratis. Bisa dibantu?')}
+        data-track-name="Features - Coba Gratis"
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center px-2 py-2 text-sm font-semibold text-slate-600 transition-colors duration-200 hover:text-brand-600"
+      >
+        atau langsung coba gratis
+      </a>
+    </div>
+  </div>
+</section>

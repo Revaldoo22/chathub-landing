@@ -1,0 +1,86 @@
+---
+import { waLink } from '../config';
+
+const mapping = [
+  {
+    before: 'Chat telat dibalas, pembeli lari ke kompetitor',
+    after: 'AI membalas setiap chat dalam hitungan detik, 24/7, tanpa tambah orang',
+  },
+  {
+    before: 'Admin buka-tutup WA, IG, FB, Telegram di HP berbeda',
+    after: 'Semua channel menyatu di satu dashboard, cukup buka satu layar',
+  },
+  {
+    before: 'Leads lupa di-follow-up, closing hilang begitu saja',
+    after: 'Smart CRM otomatis membuat reminder follow-up begitu status chat berubah',
+  },
+  {
+    before: 'Owner tidak tahu proses chat sampai mana',
+    after: 'Sales pipeline & analitik konversi per tahap, kelihatan real-time di mana macetnya',
+  },
+  {
+    before: 'Nambah admin mahal, tetap terbatas jam kerja manusia',
+    after: 'Biaya per bulan lebih murah dari gaji 1 karyawan, dan kerja nonstop tanpa lelah',
+  },
+];
+---
+
+<section class="flex md:min-h-[calc(100svh-4rem)] flex-col justify-center py-10 md:py-12 lg:py-14" id="solusi" data-snap>
+  <div class="mx-auto w-full max-w-7xl px-4 sm:px-6">
+    <div class="mx-auto max-w-2xl text-center" data-reveal>
+      <p class="text-sm font-bold tracking-wide text-brand-600 uppercase">Solusinya</p>
+      <h2 class="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-4xl">
+        ChatHub: dari chatting jadi closing, otomatis
+      </h2>
+      <p class="mt-3 text-base text-slate-600 sm:text-lg">
+        Satu platform yang menjawab kelima masalah di atas, satu per satu.
+      </p>
+    </div>
+
+    <div class="mx-auto mt-8 max-w-4xl space-y-3" data-reveal-group>
+      {
+        mapping.map((m) => (
+          <div class="grid items-stretch gap-3 md:grid-cols-[1fr_auto_1fr]">
+            <div class="flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
+              <svg class="h-5 w-5 shrink-0 text-slate-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+              <p class="text-sm text-slate-600">{m.before}</p>
+            </div>
+            <div class="hidden items-center md:flex" aria-hidden="true">
+              <svg class="h-5 w-5 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12l-7.5 7.5M21 12H3" />
+              </svg>
+            </div>
+            <div class="flex items-center gap-3 rounded-xl border border-brand-100 bg-brand-50 p-4">
+              <svg class="h-5 w-5 shrink-0 text-brand-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+              <p class="text-sm font-medium text-slate-800">{m.after}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Mini-CTA kontekstual: setelah lihat pemetaan, ajak lihat langsung -->
+    <div class="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row" data-reveal>
+      <a
+        href={waLink('Halo tim ChatHub, saya mau rasakan bedanya sebelum & sesudah pakai ChatHub. Bisa mulai gratis?')}
+        data-track-name="Solution - Mulai Gratis"
+        target="_blank"
+        rel="noopener"
+        class="cta-main inline-flex items-center justify-center gap-2 rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-bold text-white shadow-lg shadow-brand-600/20 hover:bg-brand-700 sm:text-base"
+      >
+        Rasakan bedanya, mulai gratis
+      </a>
+      <a
+        href="#cara-kerja"
+        class="inline-flex items-center gap-1.5 px-2 py-2 text-sm font-semibold text-slate-600 transition-colors duration-200 hover:text-brand-600"
+      >
+        Lihat cara kerjanya
+        <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
